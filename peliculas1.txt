@@ -1,0 +1,7 @@
+6
+Avatar;James Cameron;7.2
+Titanic;James Cameron;7.5
+Terminator 2: Judgment Day;James Cameron;7.7
+True Lies;James Cameron;6.8
+The Abyss;James Cameron;7.1
+Aliens;James Cameron;7.7

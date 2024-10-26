@@ -1,6 +1,7 @@
 #include<iostream>
 #include<string>
-
+#include<fstream>
+#include<sstream>
 
 struct Pelicula {
     std::string nombre ;
@@ -32,6 +33,48 @@ public :
 };
 
 
+void Director::agregar_pelicula(Pelicula *pelicula) {
+    lNodo *nuevo_nodo = new lNodo;
+    nuevo_nodo->val = pelicula;
+    nuevo_nodo->sig = nullptr;
+
+    if(!head){
+        head = nuevo_nodo;
+        tail = nuevo_nodo;
+    }
+
+    else{
+
+        lNodo *actual = head;
+        lNodo *anterior = nullptr;
+
+        while(actual && actual->val->nombre < pelicula -> nombre){
+            anterior = actual;
+            actual = actual->sig;
+        }
+        
+        if(!anterior){
+            nuevo_nodo->sig = head;
+            head = nuevo_nodo;
+        }
+        else{
+            anterior->sig = nuevo_nodo;
+            nuevo_nodo->sig = actual;
+
+            if(!actual){
+                tail = nuevo_nodo;
+            }
+        }
+
+    }
+    size++;
+}
+
+
+
+
+
+
 class Arboles {
 private :
     struct aNodo {
@@ -55,4 +98,91 @@ public :
     void mejores_directores ( int n ) ; // Muestra por pantalla los mejores n directores .Enumerando de 1 a n .
     void peores_directores ( int n ) ; // Muestra por pantalla los peores n directores . Enumerando desde m ( cantidad de directores ) hasta m - n .
 };
+
+
+void leer_archivo(std::string nombre_archivo, std::string *&peliculas, int &cant_pelis){
+    cant_pelis = 0;
+    std::ifstream archivo(nombre_archivo);
+
+    if(archivo.is_open()){
+        archivo>>cant_pelis;
+        archivo.ignore();
+        peliculas = new std::string[cant_pelis];
+
+        for(int i = 0; i<cant_pelis; i++){
+            std::getline(archivo, peliculas[i]);
+        }
+
+        for(int i = 0; i<cant_pelis; i++){
+            std::cout<<i+1<<". "<<peliculas[i]<<std::endl;
+        }
+    }
+};
+
+
+
+
+int main() {
+    std::string *peliculas_arreglo;
+    int cant_pelis;
+    leer_archivo("Peliculas.txt", peliculas_arreglo, cant_pelis);
+
+
+    delete[] peliculas_arreglo;
+    return 0;
+}
+
+/*
+void leer_archivo(std::string nombre_archivo, std::string *&peliculas, int &cant_programas, int &largo_max) {
+
+
+    int cant_instrucciones = 0;
+    std::ifstream archivo(nombre_archivo);
+
+    if (archivo.is_open()) {
+
+        std::string linea;
+        int largo_maximo, cantidad_programas;
+        archivo>>largo_maximo>>cantidad_programas;
+        largo_max = largo_maximo;
+        cant_programas = cantidad_programas;
+
+        archivo.clear(); // Restablecer el puntero del archivo al inicio
+        archivo.seekg(0, std::ios::beg); // Mover el puntºero del archivo al inicio
+
+
+        while (std::getline(archivo, linea)) {
+            cant_instrucciones++;
+        }
+
+        archivo.clear(); // Restablecer el puntero del archivo al inicio
+        archivo.seekg(0, std::ios::beg); // Mover el puntºero del archivo al inicio
+        std::string *aux;
+        aux = new std::string[cant_instrucciones];
+
+        instruccion = new std::string[cant_instrucciones];  //BORRAR AL FINALIZAR EL PROGRAMA
+        int i = 0;
+        while(std::getline(archivo, linea)){
+
+            aux[i] = linea;
+            
+
+            i++;
+        }
+        int j = 0;
+        for(int i = 2; i<cant_instrucciones; i++){
+            instruccion[j++] = aux[i];
+        }
+        delete[] aux;
+
+        archivo.clear(); // Restablecer el puntero del archivo al inicio
+        archivo.seekg(0, std::ios::beg); // Mover el puntero del archivo al inicio
+        archivo.close();
+    } else {
+        std::cerr << "Error: No se pudo abrir el archivo " << nombre_archivo << std::endl;
+    }
+}
+    
+*/
+
 
