@@ -44,34 +44,29 @@ void Director::agregar_pelicula(Pelicula *pelicula) {
     }
 
     else{
-
-        lNodo *actual = head;
+        lNodo *aux = head;
         lNodo *anterior = nullptr;
-
-        while(actual && actual->val->nombre < pelicula -> nombre){
-            anterior = actual;
-            actual = actual->sig;
+        while(aux && aux->val->nombre < pelicula->nombre){
+            anterior = aux;
+            aux = aux->sig;
         }
-        
+
         if(!anterior){
             nuevo_nodo->sig = head;
             head = nuevo_nodo;
         }
+        
         else{
             anterior->sig = nuevo_nodo;
-            nuevo_nodo->sig = actual;
+            nuevo_nodo->sig = aux;
 
-            if(!actual){
+            if(!aux){
                 tail = nuevo_nodo;
             }
         }
-
     }
     size++;
 }
-
-
-
 
 
 
