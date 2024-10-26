@@ -30,8 +30,63 @@ public :
     void ordenar () ; // ordena la lista
     void calcular_rating_promedio () ;
     void mostrar_peliculas () ;
+
+    lNodo * merge ( lNodo* izquierda , lNodo* derecha ) ;
+    void split(lNodo* fuente, lNodo** frente, lNodo** fondo);
 };
 
+
+void Director::agregar_pelicula(Pelicula *pelicula){
+    lNodo *nuevo_nodo = new lNodo;
+    nuevo_nodo->val = pelicula;
+
+    if(!head){
+        head = nuevo_nodo;
+        tail = nuevo_nodo;
+    }
+    else{
+        tail->sig = nuevo_nodo;
+        tail = nuevo_nodo;
+    }
+    size++;
+}
+
+Director::lNodo* Director::merge(lNodo* izquierda, lNodo* derecha) {
+    if (!izquierda) return derecha;
+    if (!derecha) return izquierda;
+
+    lNodo* resultado = nullptr;
+
+    // Compara el nombre de las películas para determinar el orden.
+    if (izquierda->val->nombre <= derecha->val->nombre) {
+        resultado = izquierda;
+        resultado->sig = merge(izquierda->sig, derecha);
+    } else {
+        resultado = derecha;
+        resultado->sig = merge(izquierda, derecha->sig);
+    }
+
+    return resultado;
+}
+
+void Director::split(lNodo* fuente, lNodo** frente, lNodo** fondo) {
+    lNodo* rapido = fuente->sig;
+    lNodo* lento = fuente;
+
+    // `rapido` avanza dos nodos y `lento` uno, dividiendo la lista en dos partes.
+    while (rapido) {
+        rapido = rapido->sig;
+        if (rapido) {
+            lento = lento->sig;
+            rapido = rapido->sig;
+        }
+    }
+
+    // Divide la lista en dos mitades
+    *frente = fuente;
+    *fondo = lento->sig;
+    lento->sig = nullptr;
+}
 
 void Director::agregar_pelicula(Pelicula *pelicula) {
     lNodo *nuevo_nodo = new lNodo;
@@ -115,7 +170,19 @@ void leer_archivo(std::string nombre_archivo, std::string *&peliculas, int &cant
 };
 
 
-
+void crear_variables(int *puntero_rating, std::string *nombre_pelicula, std::string *nombre_director){
+    std::string *peliculas_arreglo;
+    int cant_pelis;
+    leer_archivo("Peliculas.txt", peliculas_arreglo, cant_pelis);
+    
+    for(int i=0; i<cant_pelis;i++){
+        std::string pelicula_act=peliculas_arreglo[i];
+        int pos1 = pelicula_act.find(';')
+        int pos2 = pelicula_act.find(';', pos1 + 1);
+        }   
+    nombre_pelicula=pelicula_act.substr(0, pos1); 
+    nombre_director=pelicu
+    }
 
 int main() {
     std::string *peliculas_arreglo;
@@ -181,3 +248,8 @@ void leer_archivo(std::string nombre_archivo, std::string *&peliculas, int &cant
 */
 
 
+void crear_variables(int *puntero_rating, string *nombre_pelicula, string *nombre_director){
+    std::
+    leer_archivo("Peliculas.txt", peliculas_arreglo, cant_pelis);
+    
+}
