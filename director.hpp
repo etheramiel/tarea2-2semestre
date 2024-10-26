@@ -27,6 +27,9 @@ private :
     size_t size ; // longitud lista
     std::string nombre_director ;
 
+
+    float promedio;
+
 public :
    
     Director () ; // constructor
@@ -154,8 +157,15 @@ void Director::ordenar() {
 }
 
 
-//void calcular_rating_promedio ();{
-    
-//}
+void Director::calcular_rating_promedio(){
+    lNodo *actual=head;
+    promedio;
+    float suma_rating=0.0;
+    while(actual!=nullptr){
+        suma_rating+=actual->val->rating;
+        actual=actual->sig;
+    }
+    promedio=suma_rating/size; 
+}
 
 #endif

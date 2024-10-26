@@ -27,7 +27,9 @@ public :
     Pelicula * buscar_pelicula ( std::string pelicula ) ; // retorna peliculas  
     void mejores_directores ( int n ) ; // Muestra por pantalla los mejores n directores .Enumerando de 1 a n .
     void peores_directores ( int n ) ; // Muestra por pantalla los peores n directores . Enumerando desde m ( cantidad de directores ) hasta m - n .
+
 };
+
 
 Arboles::Arboles() : root_1(nullptr), size_1(0){};
 
