@@ -2,6 +2,8 @@
 #include<string>
 #include<fstream>
 #include<sstream>
+#include <stdio.h>
+#include <cmath>
 #include "director.hpp"
 
 
@@ -18,6 +20,8 @@ private :
     aNodo * root_2 ; // raiz arbol ordenado por rating
     aNodo * curr_2 ;
     size_t size_2 ;
+
+    int z=0;
 public :
     Arboles () ; // constructor
     ~ Arboles () ; // destructor
@@ -28,6 +32,13 @@ public :
     void mejores_directores ( int n ) ; // Muestra por pantalla los mejores n directores .Enumerando de 1 a n .
     void peores_directores ( int n ) ; // Muestra por pantalla los peores n directores . Enumerando desde m ( cantidad de directores ) hasta m - n .
 
+    Pelicula *buscar_pelicula_nodo(aNodo *nodo, std::string nombre);
+    void copiar_arbol_nodo(aNodo* nodo);
+    void insertar_director_por_promedio(Director* director);
+    void mostrar_arbol_por_promedio(aNodo* nodo) const;
+    void mostrar_arbol_ordenado_por_promedio() const;
+
+
 };
 
 
@@ -36,6 +47,192 @@ Arboles::Arboles() : root_1(nullptr), size_1(0){};
 Arboles::~Arboles() {
     // Liberar la memoria de los nodos y directores
     // Implementar
+}
+
+// void Arboles::copiar_arbol_nodo(aNodo* nodo) {
+//     if (!nodo) return;
+
+//     // Recorrer el subárbol izquierdo
+//     copiar_arbol_nodo(nodo->izq);
+
+//     // Clonar el director actual y calcular su promedio
+//     Director* director_copia = new Director(*nodo->val);
+//     director_copia->calcular_rating_promedio();  // Asegurarse de calcular el promedio aquí
+
+//     // Insertar el director en el nuevo árbol `root_2` por promedio
+//     insertar_director_por_promedio(director_copia);
+
+//     // Recorrer el subárbol derecho
+//     copiar_arbol_nodo(nodo->der);
+// }
+
+
+
+
+void Arboles::copiar_arbol_nodo(aNodo* nodo) {
+    if (!nodo) return;
+
+    // Recorrer el subárbol izquierdo
+    copiar_arbol_nodo(nodo->izq);
+
+    // Crear un nuevo director y copiar películas manualmente
+    Director* director_copia = new Director;
+    director_copia->set_nombre_director(nodo->val->get_nombre_director());
+    nodo->val->calcular_rating_promedio(); // Asegurarse de que el promedio esté calculado
+    director_copia->calcular_rating_promedio();
+
+    // Insertar en root_2 por promedio
+    insertar_director_por_promedio(director_copia);
+
+    // Recorrer el subárbol derecho
+    copiar_arbol_nodo(nodo->der);
+}
+
+
+// void Arboles::insertar_director_por_promedio(Director* director) {
+//     if (!director) {
+//         std::cerr << "Error: director es nullptr." << std::endl;
+//         return;
+//     }
+
+//     // Verificar que `rating_promedio` esté calculado
+//     if (director->get_rating_promedio() == -1) {  // Suponiendo que -1 es el valor por defecto
+//         std::cerr << "Error: rating promedio no calculado para " << director->get_nombre_director() << std::endl;
+//         return;
+//     }
+
+//     aNodo* nuevo_nodo = new aNodo;
+//     nuevo_nodo->val = director;
+//     nuevo_nodo->izq = nullptr;
+//     nuevo_nodo->der = nullptr;
+
+//     if (!root_2) {
+//         root_2 = nuevo_nodo;
+//     } else {
+//         aNodo* actual = root_2;
+//         aNodo* padre = nullptr;
+
+//         while (actual) {
+//             padre = actual;
+//             if (director->get_rating_promedio() < actual->val->get_rating_promedio()) {
+//                 actual = actual->izq;
+//             } else {
+//                 actual = actual->der;
+//             }
+//         }
+
+//         if (director->get_rating_promedio() < padre->val->get_rating_promedio()) {
+//             padre->izq = nuevo_nodo;
+//         } else {
+//             padre->der = nuevo_nodo;
+//         }
+//     }
+// }
+
+// void Arboles::insertar_director_por_promedio(Director* director) {
+//     aNodo* nuevo_nodo = new aNodo;
+//     nuevo_nodo->val = director;
+//     nuevo_nodo->izq = nullptr;
+//     nuevo_nodo->der = nullptr;
+//     z++;
+//     if (!root_2) {
+//         root_2 = nuevo_nodo;
+        
+
+//     } else {
+//         aNodo* actual = root_2;
+//         aNodo* padre = nullptr;
+        
+//         while (actual) {
+//             padre = actual;
+//             if (director->get_rating_promedio() < actual->val->get_rating_promedio()) {
+//                 actual = actual->izq;
+//             } else {
+//                 actual = actual->der;
+                
+//             }
+//         }
+
+//         if (director->get_rating_promedio() < padre->val->get_rating_promedio()) {
+//             padre->izq = nuevo_nodo;
+            
+//         } else {
+//             padre->der = nuevo_nodo;
+//             std::cout<<z<<std::endl;
+//         }
+//     }
+// }
+
+
+void Arboles::insertar_director_por_promedio(Director* director) {
+    if (!director) {
+        std::cerr << "Error: director es nullptr." << std::endl;
+        return;
+            
+    }
+    aNodo* nuevo_nodo = new aNodo;
+    nuevo_nodo->val = director;
+    nuevo_nodo->izq = nullptr;
+    nuevo_nodo->der = nullptr;
+
+
+    if (!root_2) {
+        root_2 = nuevo_nodo;
+        
+
+    } else {
+        aNodo* actual = root_2;
+        aNodo* padre = nullptr;
+        // while (actual) {
+            
+        //     padre = actual;
+            
+        //     if (director->get_rating_promedio() < actual->val->get_rating_promedio()) {
+        //         actual = actual->izq;
+        //     } else {
+        //         actual = actual->der;
+        //     }
+        // }
+
+        // if (director->get_rating_promedio() < padre->val->get_rating_promedio()) {
+        //     padre->izq = nuevo_nodo;
+            
+        // } else {
+        //     padre->der = nuevo_nodo;
+        //     std::cout<<z<<std::endl;
+            
+        // }
+    }
+    std::cout<<director->get_nombre_director()<<" / "<<director->get_rating_promedio()<<std::endl;
+}
+
+void Arboles::copiar_arbol() {
+    copiar_arbol_nodo(root_1);
+}
+
+
+Pelicula *Arboles::buscar_pelicula(std::string pelicula ){
+    return buscar_pelicula_nodo(root_1, pelicula);
+
+}
+
+Pelicula *Arboles::buscar_pelicula_nodo(aNodo *nodo, std::string nombre){
+
+    if (!nodo) {
+        return nullptr;
+    }
+
+    Pelicula *pelicula_encontrar = buscar_pelicula_nodo(nodo->izq, nombre);
+    if (pelicula_encontrar) {
+        return pelicula_encontrar;
+    }
+
+    pelicula_encontrar = nodo->val->buscar_pelicula_lista(nombre);
+    if (pelicula_encontrar) {
+        return pelicula_encontrar;
+    }
+
+    return buscar_pelicula_nodo(nodo->der, nombre);
 }
 
 void Arboles::insertar_pelicula(Pelicula *pelicula) {
@@ -51,6 +248,7 @@ void Arboles::insertar_pelicula(Pelicula *pelicula) {
     if (!root_1) {
         // Si el árbol está vacío, añadimos el nuevo nodo y la película
         nuevo_nodo->val->agregar_pelicula(pelicula);
+        nuevo_nodo->val->calcular_rating_promedio();  // Calcula el promedio después de la inserción
         root_1 = nuevo_nodo;
     } else {
         aNodo *actual = root_1;
@@ -65,8 +263,9 @@ void Arboles::insertar_pelicula(Pelicula *pelicula) {
                 actual = actual->der;
             }
             else {
-                // Si el director ya existe, agrega la película a su lista y libera el nodo creado
+                // Si el director ya existe, agrega la película a su lista
                 actual->val->agregar_pelicula(pelicula);
+                actual->val->calcular_rating_promedio();  // Recalcula el promedio del director actual
                 delete nuevo_nodo->val;
                 delete nuevo_nodo;
                 return;
@@ -80,8 +279,56 @@ void Arboles::insertar_pelicula(Pelicula *pelicula) {
             padre->der = nuevo_nodo;
         }
         nuevo_nodo->val->agregar_pelicula(pelicula); // Solo se llama aquí si el director es nuevo
+        nuevo_nodo->val->calcular_rating_promedio();  // Calcula el promedio para el nuevo director
     }
 }
+
+
+// void Arboles::insertar_pelicula(Pelicula *pelicula) {
+//     aNodo *nuevo_nodo = new aNodo;
+//     nuevo_nodo->val = new Director;
+    
+//     // Configuramos el nombre del director usando el setter
+//     nuevo_nodo->val->set_nombre_director(pelicula->director);
+    
+//     nuevo_nodo->izq = nullptr;
+//     nuevo_nodo->der = nullptr;
+
+//     if (!root_1) {
+//         // Si el árbol está vacío, añadimos el nuevo nodo y la película
+//         nuevo_nodo->val->agregar_pelicula(pelicula);
+//         root_1 = nuevo_nodo;
+//     } else {
+//         aNodo *actual = root_1;
+//         aNodo *padre = nullptr;
+        
+//         while (actual) {
+//             padre = actual;
+//             if (pelicula->director < actual->val->get_nombre_director()) {
+//                 actual = actual->izq;
+//             }
+//             else if (pelicula->director > actual->val->get_nombre_director()) {
+//                 actual = actual->der;
+//             }
+//             else {
+//                 // Si el director ya existe, agrega la película a su lista y libera el nodo creado
+//                 actual->val->agregar_pelicula(pelicula);
+//                 delete nuevo_nodo->val;
+//                 delete nuevo_nodo;
+//                 return;
+//             }
+//         }
+    
+//         // Insertar el nuevo nodo en la posición correcta y agregar la película
+//         if (pelicula->director < padre->val->get_nombre_director()) {
+//             padre->izq = nuevo_nodo;
+//         } else {
+//             padre->der = nuevo_nodo;
+//         }
+//         nuevo_nodo->val->agregar_pelicula(pelicula); // Solo se llama aquí si el director es nuevo
+//     }
+    
+// }
 
 Director *Arboles::buscar_director(std::string director){
     aNodo *aux = root_1;
@@ -139,38 +386,93 @@ void crear_arbol(std::string *peliculas, int cant_pelis, Arboles &arbol){
 }
 
 
-int main(){
 
+
+//-------------------------------------------------------------------------------------------------------------------------
+
+
+void Arboles::mostrar_arbol_por_promedio(aNodo* nodo) const {
+    if (!nodo) return;
+
+    // Recorrer el subárbol izquierdo
+    mostrar_arbol_por_promedio(nodo->izq);
+
+    // Mostrar el director y su promedio de rating
+    std::cout << "Director: " << nodo->val->get_nombre_director()
+              << ", Rating Promedio: " << nodo->val->get_rating_promedio() << std::endl;
+
+    // Recorrer el subárbol derecho
+    mostrar_arbol_por_promedio(nodo->der);
+}
+
+void Arboles::mostrar_arbol_ordenado_por_promedio() const {
+    std::cout << "Directores en root_2 ordenados por promedio de rating:" << std::endl;
+    mostrar_arbol_por_promedio(root_2);
+}
+
+
+
+int main() {
     Arboles arbol;
-    std::string *peliculas;
+    std::string* peliculas;
     int cant_pelis;
+
+    // Cargar las películas y construir root_1
     leer_archivo("Peliculas.txt", peliculas, cant_pelis);
     crear_arbol(peliculas, cant_pelis, arbol);
+    
 
+    // Copiar root_1 en root_2, ordenado por promedio de rating
+    arbol.copiar_arbol();
 
-    std::string comando;
+    // Mostrar root_2 para verificar que está ordenado por promedio de rating
+    //arbol.mostrar_arbol_ordenado_por_promedio();
 
-    while(true){
-        std::cin>>comando;
-        if(comando == "sd"){
-            std::string director;
-            std::cin.ignore();
-            std::getline(std::cin, director);
-            Director *d = arbol.buscar_director(director);
-            if(d){
-                d->mostrar_peliculas();
-            }
-            else{
-                std::cout<<"Director no encontrado"<<std::endl;
-            }
-        }
-        else if(comando == "q"){
-            break;
-        }        
-    }
-
-
+    //delete[] peliculas;  // Liberar memoria del arreglo de películas
+    return 0;
 }
+
+// int main(){
+
+//     Arboles arbol;
+//     std::string *peliculas;
+//     int cant_pelis;
+//     leer_archivo("Peliculas.txt", peliculas, cant_pelis);
+//     crear_arbol(peliculas, cant_pelis, arbol);
+
+
+//     std::string comando;
+
+//     while(true){
+//         std::cin>>comando;
+//         if(comando == "sd"){
+//             std::string director;
+//             std::cin.ignore();
+//             std::getline(std::cin, director);
+//             Director *d = arbol.buscar_director(director);
+//             if(d){
+//                 d->mostrar_peliculas();
+//             }
+//             else{
+//                 std::cout<<"Director no encontrado"<<std::endl;
+//             }
+//         }
+//         else if(comando == "sm"){
+//             std::string pelicula;
+//             std::cin.ignore();
+//             std::getline(std::cin, pelicula);
+//             Pelicula *p = arbol.buscar_pelicula(pelicula);
+//             if(p){
+//                 std::cout<<p->nombre<<" / "<<p->director<<" / "<<p->rating<<std::endl;
+//             }
+//             else{
+//                 std::cout<<"Pelicula no encontrada"<<std::endl;
+//             }
+//         }        
+//     }
+
+
+// }
 
 
 //int main() {
@@ -272,6 +574,5 @@ int main(){
 //     delete[] peliculas_arreglo;
 //     return 0;
 // }
-
 
 

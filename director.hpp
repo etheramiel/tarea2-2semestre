@@ -27,7 +27,7 @@ private :
     size_t size ; // longitud lista
     std::string nombre_director ;
 
-
+    float rating_promedio;
     float promedio;
 
 public :
@@ -43,7 +43,9 @@ public :
     lNodo * merge ( lNodo* izquierda , lNodo* derecha ) ;
     void split(lNodo* fuente, lNodo** frente, lNodo** fondo);
     void ordenar2(lNodo** headRef);
-    void set_nombre_director(std::string& nombre);
+    void set_nombre_director(const std::string& nombre);
+    Pelicula * buscar_pelicula_lista(std::string &nombre_pelicula);
+    float get_rating_promedio() const;
         
 };
 
@@ -59,11 +61,23 @@ Director::~Director() {
     }
 }
 
+
+Pelicula *Director::buscar_pelicula_lista(std::string &nombre_pelicula){
+    lNodo *actual = head;
+    while(actual!=nullptr){
+        if(actual->val->nombre == nombre_pelicula){
+            return actual->val;
+        }
+        actual=actual->sig;
+    }
+    return nullptr;
+}
+
 std::string Director::get_nombre_director() {
     return nombre_director;
 }
 
-void Director::set_nombre_director(std::string& nombre) {
+void Director::set_nombre_director(const std::string& nombre) {
     nombre_director = nombre;
 }
 
@@ -81,7 +95,9 @@ void Director::agregar_pelicula(Pelicula *pelicula){
         tail->sig = nuevo_nodo;
         tail = nuevo_nodo;
     }
+    
     size++;
+    
 }
 
 Director::lNodo* Director::merge(lNodo* izquierda, lNodo* derecha) {
@@ -157,15 +173,51 @@ void Director::ordenar() {
 }
 
 
-void Director::calcular_rating_promedio(){
-    lNodo *actual=head;
-    promedio;
-    float suma_rating=0.0;
-    while(actual!=nullptr){
-        suma_rating+=actual->val->rating;
-        actual=actual->sig;
+void Director::calcular_rating_promedio() {
+    float total = 0;
+    int count = 0;
+    for (lNodo* temp = head; temp; temp = temp->sig) {
+        total += temp->val->rating;
+        count++;
     }
-    promedio=suma_rating/size; 
+    rating_promedio = total / count;
+    std::cout << "Promedio calc: " << nombre_director << " " << rating_promedio << std::endl;
 }
 
+// void Director::calcular_rating_promedio() {
+//     float total = 0;
+//     int count = 0;
+//     if (size == 0) {
+//         promedio = 0; // Evitar división por cero
+//         return;
+//     }
+//     lNodo* actual = head;
+//     float suma_rating = 0.0;
+//     while (actual != nullptr) {
+//         suma_rating += actual->val->rating;
+//         actual = actual->sig;
+//     }
+
+//     promedio = suma_rating / size;
+//     std::cout << "Promedio calc: " <<actual->val->director<<" "<< promedio << std::endl;
+
+// }
+
+
+// void Director::calcular_rating_promedio(){
+//     lNodo *actual=head;
+//     float suma_rating=0.0;
+//     while(actual!=nullptr){
+//         suma_rating+=actual->val->rating;
+//         actual=actual->sig;
+//     }
+//     promedio=suma_rating/size; 
+// }
+
+
+float Director::get_rating_promedio() const{
+    std::cout << "Promedio get: " << promedio << std::endl;
+    return promedio;
+}
+    
 #endif
