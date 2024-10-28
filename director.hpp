@@ -142,9 +142,9 @@ void Director::mostrar_peliculas() {
 
     while (actual != nullptr) {
         if (actual->val) {
-            std::cout<<actual->val->nombre<<" / " <<actual->val->rating<<std::endl;
+           std::cout<<actual->val->nombre<<" / " <<actual->val->rating <<std::endl;
         } else {
-            std::cout << "Nodo con pelicula nula." << std::endl;
+           std::cout << "Nodo con pelicula nula." << std::endl;
         }
         actual = actual->sig; // Avanza al siguiente nodo
     }
@@ -175,49 +175,18 @@ void Director::ordenar() {
 
 void Director::calcular_rating_promedio() {
     float total = 0;
-    int count = 0;
     for (lNodo* temp = head; temp; temp = temp->sig) {
         total += temp->val->rating;
-        count++;
     }
-    rating_promedio = total / count;
-    std::cout << "Promedio calc: " << nombre_director << " " << rating_promedio << std::endl;
+    rating_promedio = total / size;
+   // std::cout << "Promedio calc: " << nombre_director << " " << rating_promedio << " size :"<<size<< std::endl;
 }
 
-// void Director::calcular_rating_promedio() {
-//     float total = 0;
-//     int count = 0;
-//     if (size == 0) {
-//         promedio = 0; // Evitar división por cero
-//         return;
-//     }
-//     lNodo* actual = head;
-//     float suma_rating = 0.0;
-//     while (actual != nullptr) {
-//         suma_rating += actual->val->rating;
-//         actual = actual->sig;
-//     }
-
-//     promedio = suma_rating / size;
-//     std::cout << "Promedio calc: " <<actual->val->director<<" "<< promedio << std::endl;
-
-// }
-
-
-// void Director::calcular_rating_promedio(){
-//     lNodo *actual=head;
-//     float suma_rating=0.0;
-//     while(actual!=nullptr){
-//         suma_rating+=actual->val->rating;
-//         actual=actual->sig;
-//     }
-//     promedio=suma_rating/size; 
-// }
 
 
 float Director::get_rating_promedio() const{
-    std::cout << "Promedio get: " << promedio << std::endl;
-    return promedio;
+    //std::cout << "Promedio get: " << rating_promedio << std::endl;
+    return rating_promedio;
 }
     
 #endif
