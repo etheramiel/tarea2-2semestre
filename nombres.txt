@@ -1,0 +1,6 @@
+Héctor Chanampe 202304613-2 200
+Hizo parte de las funciones de la clase director y parte de las funciones de la clase Arboles.
+
+
+Martin Pardo 202304574-8 201
+Hizo parte de las funciones de la clase director, parte de las funciones de la clase Arboles y función main.
